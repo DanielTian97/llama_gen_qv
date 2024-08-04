@@ -43,23 +43,24 @@ def update_json_result_file(file_name, result_to_write):
     json.dump(result_to_write, f, indent=4)
     f.close()
 
-preamble = "You are an experienced searcher. Please reformulate the following query in 10 different ways so that the reformulated query has a similar (either more specific or more generic) information need."
-llm = load_llama()
+if __name__=="__main__":
+    dataset_name = int(sys.argv[1])
+    preamble = "You are an experienced searcher. Please reformulate the following query in 10 different ways so that the reformulated query has a similar (either more specific or more generic) information need."
+    llm = load_llama()
 
-dataset_name = '19'
-queries, res = prepare_data(dataset_name)
+    queries, res = prepare_data(dataset_name)
 
-raw_results_path = f'./products/qvs_for_{dataset_name}_0shot.json'
+    raw_results_path = f'./products/qvs_for_{dataset_name}_0shot.json'
 
-results = {}
-for qid, query in zip(queries['qid'], queries['query']):
-    print(qid)
+    results = {}
+    for qid, query in zip(queries['qid'], queries['query']):
+        print(qid)
 
-    prompt = f'{preamble}\nQuery:"{query}"'
+        prompt = f'{preamble}\nQuery:"{query}"'
 
-    output = llama_call(llm, prompt, 0.3)
-    answer = output['choices'][0]['text']
-    
-    # print(answer)
-    results.update({qid: {'query': query, 'variants': answer}})
-    update_json_result_file(raw_results_path, results)
+        output = llama_call(llm, prompt, 0.3)
+        answer = output['choices'][0]['text']
+        
+        # print(answer)
+        results.update({qid: {'query': query, 'variants': answer}})
+        update_json_result_file(raw_results_path, results)
