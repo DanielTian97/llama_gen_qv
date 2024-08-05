@@ -74,7 +74,7 @@ if __name__=="__main__":
     processed_results = {}
     for qid in results:
         query = results[qid]['query']
-        print(qid, query)
+        # print(qid, query)
         whole_answer = results[qid]['variants']
         candidates = split_filter_lines(whole_answer)
         
