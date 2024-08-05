@@ -41,28 +41,15 @@ def split_filter_lines(raw_answer):
     return candidates
 
 def parse_qv(raw_string_containing_qv):
-    #split
-    split_by = '. '
-    parts = raw_string_containing_qv.split(split_by)
-    if(len(parts) != 2):
-        split_by = ': '
-        parts = raw_string_containing_qv.split(split_by)
-    if(len(parts) != 2):
-        split_by = '. '
-        parts = raw_string_containing_qv.split(split_by)
-    if(len(parts) != 2):
-        split_by = '."'
-        parts = raw_string_containing_qv.split(split_by)
-    if(len(parts) == 1):
-        print(raw_string_containing_qv)
-        print(parts)
+    # behead
+    i = 1 #because there are usually a separator between the number and the sentence
+    for c in raw_string_containing_qv:
+        if((c >= '0') & (c <= '9')):
+            i += 1
+        else:
+            break
+    behead = raw_string_containing_qv[i:].strip()
     #parse
-    behead = ''
-    if(split_by == '."'):
-        behead = '"'
-    for part in parts[1:]:
-        behead += part + split_by
-    behead = behead[:-len(split_by)]
     qv = behead
     qv = qv.split('(more specific)')[0]
     qv = qv.split('(more generic)')[0]
