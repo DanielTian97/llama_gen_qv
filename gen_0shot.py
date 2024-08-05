@@ -51,9 +51,18 @@ if __name__=="__main__":
     queries, res = prepare_data(dataset_name)
 
     raw_results_path = f'./products/qvs_for_{dataset_name}_0shot.json'
+    try:
+        f = open(file=raw_results_path, mode="r")
+        results = json.load(f)
+        existed_qids = len(results)
+        f.close()
+    except:
+        f = open(file=raw_results_path, mode="w+")
+        results = {}
+        existed_qids = 0
+        f.close()
 
-    results = {}
-    for qid, query in zip(queries['qid'], queries['query']):
+    for qid, query in zip(queries['qid'].tolist()[existed_qids:], queries['query'].tolist()[existed_qids:]):
         print(qid)
 
         prompt = f'{preamble}\nQuery:"{query}"'
