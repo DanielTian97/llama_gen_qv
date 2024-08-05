@@ -1,18 +1,20 @@
 from llama_cpp import Llama
 import json
 import sys
+import os
 
 def load_llama():
-      llm = Llama(
-            model_path="../Meta-Llama-3-8B-Instruct/Meta-Llama-3-8B-Instruct.Q8_0.gguf",
-            logits_all=True,
-            verbose=False,
-            n_gpu_layers=-1, # Uncomment to use GPU acceleration
-            n_ctx=2048, # Uncomment to increase the context window
-      )
-
-      llm.set_seed(1000)
-      return llm
+    cwd = os.getcwd()
+    parent = os.path.dirname(cwd)
+    llm = Llama(
+        model_path=os.path.join(parent, 'Meta-Llama-3-8B-Instruct', 'Meta-Llama-3-8B-Instruct.Q8_0.gguf'),
+        logits_all=True,
+        verbose=False,
+        n_gpu_layers=-1, # Uncomment to use GPU acceleration
+        n_ctx=2048, # Uncomment to increase the context window
+    )
+    llm.set_seed(1000)
+    return llm
 
 def llama_call(llm, prompt, temperature):
       
@@ -31,10 +33,14 @@ def llama_call(llm, prompt, temperature):
 # prepare needed files
 def prepare_data(dataset_name):
     import pandas as pd
+    
+    cwd = os.getcwd()
+    query_path = os.path.join(cwd, 'materials', f'queries_{dataset_name}.csv')
+    res_path = os.path.join(cwd, 'res', f'bm25_dl_{dataset_name}.csv')
     # prepare queries
-    queries = pd.read_csv(f'./materials/queries_{dataset_name}.csv')
+    queries = pd.read_csv(query_path)
     # prepare res file
-    res = pd.read_csv(f'./res/bm25_dl_{dataset_name}.csv') # retrieval result
+    res = pd.read_csv(res_path)
       
     return queries, res
 
@@ -50,7 +56,8 @@ if __name__=="__main__":
 
     queries, res = prepare_data(dataset_name)
 
-    raw_results_path = f'./products/qvs_for_{dataset_name}_0shot.json'
+    cwd = os.getcwd()
+    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_0shot.json')
     try:
         f = open(file=raw_results_path, mode="r")
         results = json.load(f)
