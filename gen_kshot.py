@@ -92,8 +92,9 @@ def compose_context(qid, top_qv_num, qv_book):
 if __name__=="__main__":
     dataset_name = int(sys.argv[1])
     k = int(sys.argv[2]) # number of examples
+    qv_method = sys.argv[3]
 
-    qv_book = load_examples('mt5', 'sbert')
+    qv_book = load_examples('mt5', qv_method)
     
     preamble = "You are an experienced searcher. Please reformulate the following query in 10 different ways so that the reformulated query has a similar (either more specific or more generic) information need. Examples of reformulated queries are provided."
     llm = load_llama()
@@ -101,7 +102,7 @@ if __name__=="__main__":
     queries, res = prepare_data(dataset_name)
 
     cwd = os.getcwd()
-    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot.json')
+    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot_{qv_method}.json')
     try:
         f = open(file=raw_results_path, mode="r")
         results = json.load(f)

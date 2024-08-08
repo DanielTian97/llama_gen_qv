@@ -2,9 +2,9 @@ import json
 import os
 import sys
 
-def load_raw_data(dataset_name, k):
+def load_raw_data(dataset_name, k, qv_method):
     cwd = os.getcwd()
-    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot.json')
+    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot_{qv_method}.json')
     try:
         f = open(file=raw_results_path, mode="r")
         results = json.load(f)
@@ -59,9 +59,9 @@ def parse_qv(raw_string_containing_qv):
         qv = qv[1:-1]
     return qv
 
-def save_result(dataset_name, results_to_write):
+def save_result(dataset_name, results_to_write, qv_method):
     cwd = os.getcwd()
-    processed_results_path = os.path.join(cwd, 'qvs', f'qvs_for_{dataset_name}_0shot_processed.json')
+    processed_results_path = os.path.join(cwd, 'qvs', f'qvs_for_{dataset_name}_{k}shot_{qv_method}_processed.json')
     f = open(file=processed_results_path, mode="w+", encoding='UTF-8')
     json.dump(results_to_write, f, indent=4)
     f.close()
@@ -69,8 +69,9 @@ def save_result(dataset_name, results_to_write):
 if __name__=="__main__":
     dataset_name = int(sys.argv[1])
     k = int(sys.argv[2])
+    qv_method = sys.argv[3]
     #load raw data
-    results = load_raw_data(dataset_name, k)
+    results = load_raw_data(dataset_name, k, qv_method)
     #processing
     processed_results = {}
     for qid in results:
@@ -85,4 +86,4 @@ if __name__=="__main__":
             qvs.append(qv)
         
         processed_results.update({qid: {'query': query, 'variants': qvs}})
-        save_result(dataset_name, processed_results)
+        save_result(dataset_name, processed_results, qv_method)
