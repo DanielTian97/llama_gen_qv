@@ -2,9 +2,9 @@ import json
 import os
 import sys
 
-def load_raw_data(dataset_name):
+def load_raw_data(dataset_name, k):
     cwd = os.getcwd()
-    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_0shot.json')
+    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot.json')
     try:
         f = open(file=raw_results_path, mode="r")
         results = json.load(f)
@@ -68,8 +68,9 @@ def save_result(dataset_name, results_to_write):
 
 if __name__=="__main__":
     dataset_name = int(sys.argv[1])
+    k = int(sys.argv[2])
     #load raw data
-    results = load_raw_data(dataset_name)
+    results = load_raw_data(dataset_name, k)
     #processing
     processed_results = {}
     for qid in results:

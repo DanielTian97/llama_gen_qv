@@ -101,7 +101,7 @@ if __name__=="__main__":
     queries, res = prepare_data(dataset_name)
 
     cwd = os.getcwd()
-    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot_test.json')
+    raw_results_path = os.path.join(cwd, 'products', f'qvs_for_{dataset_name}_{k}shot.json')
     try:
         f = open(file=raw_results_path, mode="r")
         results = json.load(f)
