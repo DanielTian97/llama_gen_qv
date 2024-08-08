@@ -85,9 +85,9 @@ def compose_context(qid, top_qv_num, qv_book):
     
     for i in range(len(qvs)):
         qv = qvs[i]
-        context += f'Example {i}: {qv}\n'
+        context += f'\nExample {i}: {qv}'
     
-    return context
+    return context[1:]
 
 if __name__=="__main__":
     dataset_name = int(sys.argv[1])
@@ -117,7 +117,7 @@ if __name__=="__main__":
         print(qid)
 
         examples = compose_context(qid, k, qv_book)
-        prompt = f'{preamble}\n{examples}Query:"{query}"'
+        prompt = f'{preamble}\nQuery:"{query}"\n{examples}\nReformulated queries:'
         print(prompt)
 
         output = llama_call(llm, prompt, 0.3)
