@@ -31,8 +31,9 @@ def split_filter_lines(raw_answer):
         if((split[0] >= '0') & (split[0] <= '9')):
             # print(split)
             candidates.append(split)
-        elif((split[:2] == 'Re') & (split[14] >= '0') & (split[14] <= '9')): # special case 'Reformulation 1: '
-            candidates.append(split)
+        elif(split[:2] == 'Re'):
+            if((split[14] >= '0') & (split[14] <= '9')): # special case 'Reformulation 1: '
+                candidates.append(split)
 
     # if(len(candidates) != 10):
     #     print(len(candidates))
